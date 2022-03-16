@@ -1,7 +1,7 @@
 package com.recarchoi.service;
 
-import com.atguigu.paymentdemo.entity.OrderInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.recarchoi.entity.OrderInfo;
 
 public interface OrderInfoService extends IService<OrderInfo> {
 

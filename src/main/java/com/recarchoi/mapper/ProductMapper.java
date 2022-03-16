@@ -1,7 +1,7 @@
 package com.recarchoi.mapper;
 
-import com.atguigu.paymentdemo.entity.Product;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.recarchoi.entity.Product;
 
 public interface ProductMapper extends BaseMapper<Product> {
 

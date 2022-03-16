@@ -1,9 +1,9 @@
 package com.recarchoi.service.impl;
 
-import com.atguigu.paymentdemo.entity.OrderInfo;
-import com.atguigu.paymentdemo.mapper.OrderInfoMapper;
-import com.atguigu.paymentdemo.service.OrderInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.recarchoi.entity.OrderInfo;
+import com.recarchoi.mapper.OrderInfoMapper;
+import com.recarchoi.service.OrderInfoService;
 import org.springframework.stereotype.Service;
 
 @Service
