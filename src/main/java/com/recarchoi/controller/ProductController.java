@@ -7,6 +7,7 @@ import com.recarchoi.vo.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,9 +19,10 @@ import java.util.List;
  * @since 2022/3/15 23:36
  */
 @Api(tags = "商品管理")
+@CrossOrigin
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/product")
+@RequestMapping(value = "/api/product")
 public class ProductController {
 
     public final ProductService productService;
