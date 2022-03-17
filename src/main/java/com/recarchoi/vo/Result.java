@@ -1,6 +1,11 @@
 package com.recarchoi.vo;
 
 import lombok.Data;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 结果返回封装
@@ -9,6 +14,8 @@ import lombok.Data;
  * @since 2022/3/15 23:33
  */
 @Data
+@Setter
+@Accessors(chain = true)
 public class Result {
     /**
      * 200正常，非200表示异常

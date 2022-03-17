@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
-import java.security.PrivateKey;
 
 @SpringBootTest
 class PaymentApplicationTests {
@@ -15,8 +14,8 @@ class PaymentApplicationTests {
 
     @Test
     void testGetPrivateKey() {
-        PrivateKey privateKey = wxPayConfig.getPrivateKey(wxPayConfig.getPrivateKeyPath());
-        System.out.println(privateKey);
+        //PrivateKey privateKey = wxPayConfig.getPrivateKey(wxPayConfig.getPrivateKeyPath());
+        //System.out.println(privateKey);
     }
 
 }

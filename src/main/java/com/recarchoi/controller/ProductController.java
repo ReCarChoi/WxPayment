@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -29,10 +30,12 @@ public class ProductController {
 
     @GetMapping("/list")
     @ApiOperation("获取商品列表")
-    public Result list(){
+    public Result list() {
         System.out.println(productService);
         List<Product> products = productService.list(new QueryWrapper<Product>());
-        return Result.succ(products);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("productList", products);
+        return Result.succ(map);
     }
 
 }
