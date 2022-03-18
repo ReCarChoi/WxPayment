@@ -18,6 +18,7 @@
         <java.version>1.8</java.version>
         <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
         <mybatis-plus.version>3.2.0</mybatis-plus.version>
+        <wechatpay.version>0.4.3</wechatpay.version>
     </properties>
 
     <dependencies>
@@ -38,6 +39,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
 
         <!--swagger接口测试-->
@@ -74,11 +79,12 @@
         <dependency>
             <groupId>com.github.wechatpay-apiv3</groupId>
             <artifactId>wechatpay-apache-httpclient</artifactId>
-            <version>0.4.3</version>
+            <version>${wechatpay.version}</version>
         </dependency>
+        <!--json格式转换-->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
         </dependency>
     </dependencies>
 
