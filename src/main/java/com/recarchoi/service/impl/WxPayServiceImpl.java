@@ -6,8 +6,10 @@ import com.recarchoi.entity.OrderInfo;
 import com.recarchoi.enums.OrderStatus;
 import com.recarchoi.enums.wxpay.WxApiType;
 import com.recarchoi.enums.wxpay.WxNotifyType;
+import com.recarchoi.service.OrderInfoService;
 import com.recarchoi.service.WxPayService;
 import com.recarchoi.util.OrderNoUtils;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -27,12 +29,12 @@ import java.util.Map;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class WxPayServiceImpl implements WxPayService {
-    @Resource
-    private WxPayConfig wxPayConfig;
 
-    @Resource
-    private CloseableHttpClient wxPayClient;
+    private final WxPayConfig wxPayConfig;
+    private final CloseableHttpClient wxPayClient;
+    private final OrderInfoService orderInfoService;
 
     /**
      * 创建订单，调用Native支付接口
@@ -44,14 +46,7 @@ public class WxPayServiceImpl implements WxPayService {
     @Override
     public Map<String, Object> nativePay(Long productId) throws Exception {
         //生成订单
-        OrderInfo orderInfo = new OrderInfo();
-        orderInfo.setTitle("test");
-        orderInfo.setOrderNo(OrderNoUtils.getOrderNo());
-        orderInfo.setProductId(productId);
-        orderInfo.setTotalFee(1);
-        orderInfo.setOrderStatus(OrderStatus.NOTPAY.getType());
-        //实际业务需要判断用户
-        //orderInfo.setUserId();
+        OrderInfo orderInfo = orderInfoService.createOrderByProductId(productId);
         //TODO：存入数据库
 
         log.info("调用统一生成API");
