@@ -3,12 +3,10 @@ package com.recarchoi.service.impl;
 import com.google.gson.Gson;
 import com.recarchoi.config.WxPayConfig;
 import com.recarchoi.entity.OrderInfo;
-import com.recarchoi.enums.OrderStatus;
 import com.recarchoi.enums.wxpay.WxApiType;
 import com.recarchoi.enums.wxpay.WxNotifyType;
 import com.recarchoi.service.OrderInfoService;
 import com.recarchoi.service.WxPayService;
-import com.recarchoi.util.OrderNoUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -17,8 +15,8 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
-import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,8 +45,15 @@ public class WxPayServiceImpl implements WxPayService {
     public Map<String, Object> nativePay(Long productId) throws Exception {
         //生成订单
         OrderInfo orderInfo = orderInfoService.createOrderByProductId(productId);
-        //TODO：存入数据库
-
+        String codeUrl = orderInfo.getCodeUrl();
+        if (!StringUtils.hasLength(codeUrl)) {
+            log.info("订单已保存，二维码已存在");
+            Map<String, Object> map = new HashMap<>();
+            map.put("code_url", codeUrl);
+            map.put("orderNo", orderInfo.getOrderNo());
+            return map;
+        }
+        //如果没有该订单，则生成新订单
         log.info("调用统一生成API");
         //调用统一下单Api
         HttpPost httpPost = new HttpPost(wxPayConfig.getDomain().concat(WxApiType.NATIVE_PAY.getType()));
@@ -90,7 +95,10 @@ public class WxPayServiceImpl implements WxPayService {
             //响应结果
             Map<String, String> resultMap = gson.fromJson(bodyAsString, HashMap.class);
             //二维码
-            String codeUrl = resultMap.get("code_url");
+            codeUrl = resultMap.get("code_url");
+            //保存二维码
+            String orderNo = orderInfo.getOrderNo();
+            orderInfoService.saveCodeUrl(orderNo, codeUrl);
 
             Map<String, Object> map = new HashMap<>();
             map.put("code_url", codeUrl);

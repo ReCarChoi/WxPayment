@@ -12,6 +12,8 @@ import com.recarchoi.util.OrderNoUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo> implements OrderInfoService {
@@ -42,12 +44,27 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         return orderInfo;
     }
 
+    @Override
+    public void saveCodeUrl(String orderNo, String codeUrl) {
+        QueryWrapper<OrderInfo> wrapper = new QueryWrapper<OrderInfo>()
+                .eq("order_No", orderNo);
+        OrderInfo orderInfo = new OrderInfo();
+        orderInfo.setCodeUrl(codeUrl);
+        orderInfoMapper.update(orderInfo, wrapper);
+    }
+
+    @Override
+    public List<OrderInfo> getListByCreateTimeDesc() {
+        QueryWrapper<OrderInfo> orderInfoQueryWrapper = new QueryWrapper<OrderInfo>()
+                .orderByDesc("create_time");
+        return orderInfoMapper.selectList(orderInfoQueryWrapper);
+    }
+
     private OrderInfo getNoPayOrderByProductId(Long productId) {
-        QueryWrapper<OrderInfo> wrapper = new QueryWrapper<>();
-        wrapper.eq("product_id", productId);
-        wrapper.eq("order_status", OrderStatus.NOTPAY.getType());
+        QueryWrapper<OrderInfo> wrapper = new QueryWrapper<OrderInfo>()
+                .eq("product_id", productId)
+                .eq("order_status", OrderStatus.NOTPAY.getType());
         //.eq("uesr_id",userId);
         return orderInfoMapper.selectOne(wrapper);
     }
-
 }

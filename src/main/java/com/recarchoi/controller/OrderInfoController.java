@@ -1,8 +1,7 @@
 package com.recarchoi.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.recarchoi.entity.Product;
-import com.recarchoi.service.ProductService;
+import com.recarchoi.entity.OrderInfo;
+import com.recarchoi.service.OrderInfoService;
 import com.recarchoi.vo.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -17,23 +16,23 @@ import java.util.List;
 
 /**
  * @author recarchoi
- * @since 2022/3/15 23:36
+ * @since 2022/3/20 22:20
  */
-@Api(tags = "商品管理")
+@Api(tags = "订单信息管理")
 @CrossOrigin
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/api/product")
-public class ProductController {
+@RequestMapping(value = "/api/order-info")
+public class OrderInfoController {
 
-    public final ProductService productService;
+    private final OrderInfoService orderInfoService;
 
+    @ApiOperation("获取订单列表")
     @GetMapping("/list")
-    @ApiOperation("获取商品列表")
-    public Result list() {
-        List<Product> products = productService.list(new QueryWrapper<Product>());
+    public Result getOrderInfoByList() {
+        List<OrderInfo> list = orderInfoService.getListByCreateTimeDesc();
         HashMap<String, Object> map = new HashMap<>();
-        map.put("productList", products);
+        map.put("list", list);
         return Result.succ(map);
     }
 
