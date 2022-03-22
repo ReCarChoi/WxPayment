@@ -47,7 +47,7 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
     @Override
     public void saveCodeUrl(String orderNo, String codeUrl) {
         QueryWrapper<OrderInfo> wrapper = new QueryWrapper<OrderInfo>()
-                .eq("order_No", orderNo);
+                .eq("order_no", orderNo);
         OrderInfo orderInfo = new OrderInfo();
         orderInfo.setCodeUrl(codeUrl);
         orderInfoMapper.update(orderInfo, wrapper);

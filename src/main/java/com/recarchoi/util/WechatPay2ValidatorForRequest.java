@@ -44,6 +44,7 @@ public class WechatPay2ValidatorForRequest{
 
     public final boolean validate(HttpServletRequest request) throws IOException {
         try {
+            //处理请求参数
             validateParameters(request);
 
             String message = buildMessage(request);

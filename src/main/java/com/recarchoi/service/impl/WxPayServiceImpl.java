@@ -44,12 +44,13 @@ public class WxPayServiceImpl implements WxPayService {
     @Override
     public Map<String, Object> nativePay(Long productId) throws Exception {
         //生成订单
+        log.info("生成订单");
         OrderInfo orderInfo = orderInfoService.createOrderByProductId(productId);
         String codeUrl = orderInfo.getCodeUrl();
-        if (!StringUtils.hasLength(codeUrl)) {
+        if (StringUtils.hasLength(codeUrl)) {
             log.info("订单已保存，二维码已存在");
             Map<String, Object> map = new HashMap<>();
-            map.put("code_url", codeUrl);
+            map.put("codeUrl", codeUrl);
             map.put("orderNo", orderInfo.getOrderNo());
             return map;
         }
@@ -101,7 +102,7 @@ public class WxPayServiceImpl implements WxPayService {
             orderInfoService.saveCodeUrl(orderNo, codeUrl);
 
             Map<String, Object> map = new HashMap<>();
-            map.put("code_url", codeUrl);
+            map.put("codeUrl", codeUrl);
             map.put("orderNo", orderInfo.getOrderNo());
 
             return map;
