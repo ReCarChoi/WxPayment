@@ -1,5 +1,6 @@
 package com.recarchoi.service;
 
+import java.security.GeneralSecurityException;
 import java.util.Map;
 
 /**
@@ -14,4 +15,11 @@ public interface WxPayService {
      * @return 支付对象
      */
     Map<String, Object> nativePay(Long productId) throws Exception;
+
+    /**
+     * 订单处理
+     *
+     * @param bodyMap request当中返回的json数据转换成的map
+     */
+    void processOrder(Map<String, Object> bodyMap) throws GeneralSecurityException;
 }

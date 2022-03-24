@@ -2,6 +2,7 @@ package com.recarchoi.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.recarchoi.entity.OrderInfo;
+import com.recarchoi.enums.OrderStatus;
 
 import java.util.List;
 
@@ -29,4 +30,20 @@ public interface OrderInfoService extends IService<OrderInfo> {
      * @return 订单列表
      */
     List<OrderInfo> getListByCreateTimeDesc();
+
+    /**
+     * 修改订单状态
+     *
+     * @param orderNo     订单号
+     * @param orderStatus 需要修改成为的状态
+     */
+    void updateOrderStatusByOrderNo(String orderNo, OrderStatus orderStatus);
+
+    /**
+     * 通过订单号获取订单状态
+     *
+     * @param orderNo 商户订单号
+     * @return 订单状态
+     */
+    String getOrderStatusByOrderNo(String orderNo);
 }

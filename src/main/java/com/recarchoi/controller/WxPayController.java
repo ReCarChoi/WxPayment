@@ -1,7 +1,6 @@
 package com.recarchoi.controller;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.recarchoi.service.WxPayService;
 import com.recarchoi.util.HttpUtils;
 import com.recarchoi.util.WechatPay2ValidatorForRequest;
@@ -51,8 +50,8 @@ public class WxPayController {
             //处理通知参数
             String body = HttpUtils.readData(request);
             Map<String, Object> bodyMap = gson.fromJson(body, HashMap.class);
-            log.info("支付通知的id ===》 {}", bodyMap.get("id"));
-            log.info("支付通知的完整信息 ===》 {}", body);
+            log.info("支付通知的id ===> {}", bodyMap.get("id"));
+            log.info("支付通知的完整信息 ===> {}", body);
 
             //签名的验证
             WechatPay2ValidatorForRequest validatorForRequest = new WechatPay2ValidatorForRequest(
@@ -67,18 +66,18 @@ public class WxPayController {
                 responseMap.put("message", "签名验证失败");
                 return gson.toJson(responseMap);
             }
-            //TODO : 处理订单
-
+            //处理订单
+            wxPayService.processOrder(bodyMap);
             //应答超时
             //TimeUnit.SECONDS.sleep(5);
-            //失败应答
+            //成功应答
             response.setStatus(200);
             responseMap.put("code", "SUCCESS");
             responseMap.put("message", "支付成功");
             return gson.toJson(responseMap);
         } catch (Exception e) {
             e.printStackTrace();
-            //通知应答
+            //失败应答
             response.setStatus(500);
             responseMap.put("code", "FAIL");
             responseMap.put("message", "支付失败");

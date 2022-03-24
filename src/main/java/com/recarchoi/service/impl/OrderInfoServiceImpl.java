@@ -10,10 +10,12 @@ import com.recarchoi.mapper.ProductMapper;
 import com.recarchoi.service.OrderInfoService;
 import com.recarchoi.util.OrderNoUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo> implements OrderInfoService {
@@ -48,7 +50,7 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
     public void saveCodeUrl(String orderNo, String codeUrl) {
         QueryWrapper<OrderInfo> wrapper = new QueryWrapper<OrderInfo>()
                 .eq("order_no", orderNo);
-        OrderInfo orderInfo = new OrderInfo();
+        OrderInfo orderInfo = orderInfoMapper.selectOne(wrapper);
         orderInfo.setCodeUrl(codeUrl);
         orderInfoMapper.update(orderInfo, wrapper);
     }
@@ -58,6 +60,28 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         QueryWrapper<OrderInfo> orderInfoQueryWrapper = new QueryWrapper<OrderInfo>()
                 .orderByDesc("create_time");
         return orderInfoMapper.selectList(orderInfoQueryWrapper);
+    }
+
+    @Override
+    public void updateOrderStatusByOrderNo(String orderNo, OrderStatus orderStatus) {
+        log.info("更新订单状态 ===> {}", orderStatus.getType());
+        QueryWrapper<OrderInfo> wrapper = new QueryWrapper<OrderInfo>()
+                .eq("order_no", orderNo);
+        OrderInfo orderInfo = orderInfoMapper.selectOne(wrapper);
+        orderInfo.setOrderStatus(orderStatus.getType());
+        orderInfoMapper.update(orderInfo, wrapper);
+    }
+
+    @Override
+    public String getOrderStatusByOrderNo(String orderNo) {
+        QueryWrapper<OrderInfo> wrapper = new QueryWrapper<OrderInfo>()
+                .eq("order_no", orderNo);
+        OrderInfo orderInfo = orderInfoMapper.selectOne(wrapper);
+        if (orderInfo == null) {
+            log.info("不存在该订单");
+            return null;
+        }
+        return orderInfo.getOrderStatus();
     }
 
     private OrderInfo getNoPayOrderByProductId(Long productId) {
