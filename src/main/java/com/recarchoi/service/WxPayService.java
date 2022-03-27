@@ -1,5 +1,6 @@
 package com.recarchoi.service;
 
+import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Map;
 
@@ -22,4 +23,11 @@ public interface WxPayService {
      * @param bodyMap request当中返回的json数据转换成的map
      */
     void processOrder(Map<String, Object> bodyMap) throws GeneralSecurityException;
+
+    /**
+     * 通过订单号取消订单
+     *
+     * @param orderNo 订单号
+     */
+    void cancelOrderByOrderNo(String orderNo) throws IOException;
 }

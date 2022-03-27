@@ -1,6 +1,7 @@
 package com.recarchoi.controller;
 
 import com.google.gson.Gson;
+import com.recarchoi.service.OrderInfoService;
 import com.recarchoi.service.WxPayService;
 import com.recarchoi.util.HttpUtils;
 import com.recarchoi.util.WechatPay2ValidatorForRequest;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,6 +41,14 @@ public class WxPayController {
         //返回支付二维码和链接
         Map<String, Object> map = wxPayService.nativePay(productId);
         return Result.succ(map);
+    }
+
+    @ApiOperation("关闭订单")
+    @PostMapping("/cancel/{orderNo}")
+    public Result cancelOrder(@PathVariable(value = "orderNo") String orderNo) throws IOException {
+        log.info("取消订单:单号 ===> {}", orderNo);
+        wxPayService.cancelOrderByOrderNo(orderNo);
+        return Result.succ(204, "订单已取消");
     }
 
     @ApiOperation("支付结果通知")
