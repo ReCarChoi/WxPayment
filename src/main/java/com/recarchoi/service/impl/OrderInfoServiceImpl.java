@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 
 @Slf4j
@@ -82,6 +84,22 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
             return null;
         }
         return orderInfo.getOrderStatus();
+    }
+
+    @Override
+    public List<OrderInfo> getNoPayOrderByDuration(int minutes) {
+        Instant minus = Instant.now().minus(Duration.ofMinutes(minutes));
+        QueryWrapper<OrderInfo> wrapper = new QueryWrapper<OrderInfo>()
+                .eq("order_status", OrderStatus.NOTPAY.getType())
+                .le("create_time", minus);
+        return orderInfoMapper.selectList(wrapper);
+    }
+
+    @Override
+    public OrderInfo getOrderByOrderNo(String orderNo) {
+        QueryWrapper<OrderInfo> wrapper = new QueryWrapper<OrderInfo>()
+                .eq("order_no", orderNo);
+        return orderInfoMapper.selectOne(wrapper);
     }
 
     private OrderInfo getNoPayOrderByProductId(Long productId) {

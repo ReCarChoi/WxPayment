@@ -1,7 +1,6 @@
 package com.recarchoi.controller;
 
 import com.google.gson.Gson;
-import com.recarchoi.service.OrderInfoService;
 import com.recarchoi.service.WxPayService;
 import com.recarchoi.util.HttpUtils;
 import com.recarchoi.util.WechatPay2ValidatorForRequest;
@@ -34,21 +33,59 @@ public class WxPayController {
     private final WxPayService wxPayService;
     private final Verifier verifier;
 
+    @ExceptionHandler
     @ApiOperation("调用统一Api，生成支付二维码")
     @PostMapping("/native/{productId}")
-    public Result nativePay(@PathVariable(value = "productId") Long productId) throws Exception {
+    public Result nativePay(@PathVariable(value = "productId") Long productId) {
         log.info("发起支付请求");
         //返回支付二维码和链接
-        Map<String, Object> map = wxPayService.nativePay(productId);
+        Map<String, Object> map = null;
+        try {
+            map = wxPayService.nativePay(productId);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return Result.succ(map);
+    }
+
+    @ApiOperation("查询订单")
+    @GetMapping("/query/{orderNo}")
+    public Result queryOrder(@PathVariable(value = "orderNo") String orderNo) {
+        log.info("查询订单 ===> {}", orderNo);
+        String result = null;
+        try {
+            result = wxPayService.queryOrder(orderNo);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return Result.succ(result);
     }
 
     @ApiOperation("关闭订单")
     @PostMapping("/cancel/{orderNo}")
-    public Result cancelOrder(@PathVariable(value = "orderNo") String orderNo) throws IOException {
+    public Result cancelOrder(@PathVariable(value = "orderNo") String orderNo) {
         log.info("取消订单:单号 ===> {}", orderNo);
-        wxPayService.cancelOrderByOrderNo(orderNo);
+        try {
+            wxPayService.cancelOrderByOrderNo(orderNo);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return Result.succ(204, "订单已取消");
+    }
+
+    @ApiOperation("申请退款")
+    @PostMapping("/refunds/{orderNo}/{reason}")
+    public Result refunds(
+            @PathVariable(value = "orderNo") String orderNo,
+            @PathVariable(value = "reason") String reason
+    ) {
+        log.info("申请退款");
+        try {
+            wxPayService.refund(orderNo,reason);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return Result.succ("退款成功");
     }
 
     @ApiOperation("支付结果通知")
